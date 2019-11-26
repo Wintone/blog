@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.study.blog.mapper.SeqMapper">
+	<select id="getValueById" parameterType="java.lang.String" resultType="java.lang.Long">
+        select current_value currentValue from util_seq where seq_id = #{seqId}
+    </select>
+
+	<update id="update" parameterType="com.study.blog.data.Sequence">
+        update util_seq set current_value = #{currentValue} where seq_id = #{seqId}
+    </update>
+</mapper>

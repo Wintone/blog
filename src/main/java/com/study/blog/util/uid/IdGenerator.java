@@ -1,11 +1,19 @@
 package com.study.blog.util.uid;
 
+import com.study.blog.data.Sequence;
+import com.study.blog.service.SeqService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class SmallIdGenerator {
     private static SmallIdGenerator smallIdGenerator = new SmallIdGenerator();
     private volatile long start = 0L;
     private volatile long end = 0L;
     private volatile long current = 0L;
     private long capacity = 10L;
+    private static final String SEQ_ID = "int6";
+
+    @Autowired
+    private SeqService seqService;
 
     private SmallIdGenerator() {
     }
@@ -24,15 +32,11 @@ public class SmallIdGenerator {
         if (this.current < this.end) {
             return (long)(this.current++);
         } else {
-            long currentValue = DBTools.selectAsLong(conn, "select a.current_value from util_seq a where a.seq_id=? for update", -1L, new Object[]{this.id});
+            long currentValue = seqService.getValueById(SEQ_ID);
             if (currentValue < 0L) {
-                throw new BaseException("core.e1003", "Can not find the sequece :" + this.id);
+                throw new RuntimeException("Can not find the sequece :" + SEQ_ID);
             }
-
-            DBTools.update(conn, "update util_seq a set a.current_value=? where a.seq_id=?", new Object[]{currentValue + capacity, this.id});
-            DBTools.insert(conn, "insert into util_seq_log(seq_id,start,end,update_date,client)values(?,?,?,now(),?)", new Object[]{this.id, currentValue, currentValue + capacity, this.client});
-            DBTools.commit(conn);
-            this.onPrepare(this.current, this.capacity);
+            seqService.update(new Sequence(SEQ_ID,currentValue + capacity));
             this.current = this.start;
             return (long)(this.current++);
         }
