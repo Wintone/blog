@@ -5,6 +5,20 @@ import java.sql.Timestamp;
 
 public class Sequence implements Serializable {
 
+    private static final long serialVersionUID = 8025353891479934700L;
+
+    private String seqId;
+
+    private String name;
+
+    private String note;
+
+    private Long currentValue;
+
+    private Timestamp createTime;
+
+    private Timestamp updateTime;
+
     public String getSeqId() {
         return seqId;
     }
@@ -55,18 +69,9 @@ public class Sequence implements Serializable {
 
     public Sequence(String seqId, Long currentValue) {
         this.setSeqId(seqId);
+        this.setName("");
+        this.setNote("");
         this.setCurrentValue(currentValue);
     }
-    private String seqId;
-
-    private String name;
-
-    private String note;
-
-    private Long currentValue;
-
-    private Timestamp createTime;
-
-    private Timestamp updateTime;
 
 }

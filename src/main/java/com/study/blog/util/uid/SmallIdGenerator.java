@@ -3,7 +3,11 @@ package com.study.blog.util.uid;
 import com.study.blog.data.Sequence;
 import com.study.blog.service.SeqService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
+@Component
 public class SmallIdGenerator {
     private static SmallIdGenerator smallIdGenerator = new SmallIdGenerator();
     private volatile long start = 0L;
@@ -16,6 +20,10 @@ public class SmallIdGenerator {
     private SeqService seqService;
 
     private SmallIdGenerator() {
+    }
+    @PostConstruct
+    public void init() {
+        smallIdGenerator.seqService = this.seqService;
     }
     public static SmallIdGenerator getGenerator() {
         if (smallIdGenerator == null) {
@@ -36,6 +44,8 @@ public class SmallIdGenerator {
             if (currentValue < 0L) {
                 throw new RuntimeException("Can not find the sequece :" + SEQ_ID);
             }
+            this.start = currentValue;
+            this.end = currentValue + capacity;
             seqService.update(new Sequence(SEQ_ID,currentValue + capacity));
             this.current = this.start;
             return (long)(this.current++);

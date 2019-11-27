@@ -44,7 +44,7 @@ public class MyBatisConfiguration {
 
 	@Bean
 	@ConditionalOnBean(SqlSessionFactoryBean.class) // 当 SqlSessionFactoryBean,实例存在时创建对象
-	public MapperScannerConfigurer mapperScannerConfigurer() {
+	public static MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 		mapperScannerConfigurer.setBasePackage("com.study.blog.mapper");
 		return mapperScannerConfigurer;
