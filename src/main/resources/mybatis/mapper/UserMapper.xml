@@ -40,4 +40,39 @@
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from bl_user where user_id = #{userId}
     </delete>
+
+    <!-- 获取user列表 -->
+    <select id="usersList" parameterType="com.study.springboot.data.User">
+        <![CDATA[select * from bl_user]]>
+        <where>
+            <if test="loginName != null and loginName != ''">
+                login_name = #{loginName}
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile}
+            </if>
+        </where>
+        <![CDATA[ order by user_id desc ]]>
+        <if test="pageSize != null and start != null ">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    <!-- 获取user列表的总量 -->
+    <select id="usersSize" resultType="Integer">
+        <![CDATA[select count(*) from bl_user]]>
+        <where>
+            <if test="loginName != null and loginName != ''">
+                login_name = #{loginName}
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile}
+            </if>
+        </where>
+    </select>
 </mapper>
