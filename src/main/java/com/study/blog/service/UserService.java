@@ -12,6 +12,17 @@ public class UserService {
 	private UserMapper userMapper;
 
 	/**
+	 * 验证登录名是否存在
+	 *
+	 * @param loginName
+	 * @return
+	 */
+	public boolean checkUser(String loginName) {
+		boolean exist = this.userMapper.checkUser(loginName);
+		return exist;
+	}
+
+	/**
 	 * 通过用户id得到用户信息
 	 * @param userId
 	 * @return
